@@ -1,0 +1,12 @@
+-rrequirements.txt
+coveralls
+genty
+mock
+nose
+ordereddict
+pep8
+pylint
+pytest
+pytest-cov
+pytest-xdist
+tox
