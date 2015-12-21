@@ -1,5 +1,9 @@
 #! /usr/bin/make -f
 
 export PYBUILD_NAME=flaky
+export PYBUILD_TEST_PYTEST=1
+export PYBUILD_TEST_ARGS=-k 'example and not nose and not options' --doctest-modules
+export PYBUILD_DISABLE=test/pypy
+
 %:
 	dh $@ --with pypy,python3,python2 --buildsystem=pybuild

@@ -8,8 +8,14 @@ Build-Depends:
  pypy,
  pypy-setuptools,
  python-all,
+ python-mock,
+ python-nose,
+ python-pytest,
  python-setuptools,
  python3-all,
+ python3-mock,
+ python3-nose,
+ python3-pytest,
  python3-setuptools,
 Standards-Version: 3.9.6
 Homepage: https://github.com/box/flaky
