@@ -1,4 +1,4 @@
-Source: flaky
+Source: python-flaky
 Section: python
 Priority: optional
 Maintainer: Tristan Seligmann <mithrandi@debian.org>
