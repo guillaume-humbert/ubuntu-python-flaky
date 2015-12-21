@@ -1,0 +1,60 @@
+Source: flaky
+Section: python
+Priority: optional
+Maintainer: Tristan Seligmann <mithrandi@debian.org>
+Build-Depends:
+ debhelper (>= 9),
+ dh-python,
+ pypy,
+ pypy-setuptools,
+ python-all,
+ python-setuptools,
+ python3-all,
+ python3-setuptools,
+Standards-Version: 3.9.6
+Homepage: https://github.com/box/flaky
+
+Package: python-flaky
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}
+Recommends: ${python:Recommends}
+Suggests: ${python:Suggests}
+XB-Python-Egg-Name: flaky
+Description: Plugin for nose or py.test that automatically reruns flaky tests (Python 2)
+ Flaky is a plugin for nose or py.test that automatically reruns flaky tests.
+ .
+ Ideally, tests reliably pass or fail, but sometimes test fixtures must rely on
+ components that aren't 100% reliable. With flaky, instead of removing those
+ tests or marking them to @skip, they can be automatically retried.
+ .
+ This package contains the Python 2 version of flaky.
+
+Package: python3-flaky
+Architecture: all
+Depends: ${misc:Depends}, ${python3:Depends}
+Recommends: ${python3:Recommends}
+Suggests: ${python3:Suggests}
+XB-Python-Egg-Name: flaky
+Description: Plugin for nose or py.test that automatically reruns flaky tests (Python 3)
+ Flaky is a plugin for nose or py.test that automatically reruns flaky tests.
+ .
+ Ideally, tests reliably pass or fail, but sometimes test fixtures must rely on
+ components that aren't 100% reliable. With flaky, instead of removing those
+ tests or marking them to @skip, they can be automatically retried.
+ .
+ This package contains the Python 3 version of flaky.
+
+Package: pypy-flaky
+Architecture: all
+Depends: ${misc:Depends}, ${pypy:Depends}
+Recommends: ${pypy:Recommends}
+Suggests: ${pypy:Suggests}
+XB-Python-Egg-Name: flaky
+Description: Plugin for nose or py.test that automatically reruns flaky tests (PyPy)
+ Flaky is a plugin for nose or py.test that automatically reruns flaky tests.
+ .
+ Ideally, tests reliably pass or fail, but sometimes test fixtures must rely on
+ components that aren't 100% reliable. With flaky, instead of removing those
+ tests or marking them to @skip, they can be automatically retried.
+ .
+ This package contains the PyPy version of flaky.

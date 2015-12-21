@@ -1,0 +1,5 @@
+#! /usr/bin/make -f
+
+export PYBUILD_NAME=flaky
+%:
+	dh $@ --with pypy,python3,python2 --buildsystem=pybuild
