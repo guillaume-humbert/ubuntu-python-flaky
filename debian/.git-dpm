@@ -6,3 +6,6 @@
 python-flaky_2.4.1.orig.tar.gz
 be486034d7ee5e43fbdc6b5d23422e8376943c4f
 33176
+debianTag="debian/%e%v"
+patchedTag="patched/%e%v"
+upstreamTag="upstream/%e%u"
