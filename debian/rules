@@ -2,7 +2,7 @@
 
 export PYBUILD_NAME=flaky
 export PYBUILD_TEST_PYTEST=1
-export PYBUILD_TEST_ARGS=-k 'example and not nose and not options' --doctest-modules
+export PYBUILD_TEST_ARGS=-p flaky.flaky_pytest_plugin -k 'example and not nose and not options' --doctest-modules
 export PYBUILD_DISABLE=test/pypy
 
 %:
