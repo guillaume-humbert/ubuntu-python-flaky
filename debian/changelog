@@ -1,3 +1,9 @@
+python-flaky (3.0.2-1) unstable; urgency=medium
+
+  * New upstream version.
+
+ -- Tristan Seligmann <mithrandi@debian.org>  Wed, 20 Jan 2016 01:35:43 +0200
+
 python-flaky (2.4.1-1) unstable; urgency=low
 
   * Initial upload (closes: #808605).
