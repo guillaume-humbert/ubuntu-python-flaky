@@ -28,7 +28,6 @@ Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}
 Recommends: ${python:Recommends}
 Suggests: ${python:Suggests}
-XB-Python-Egg-Name: flaky
 Description: Plugin for nose or py.test that automatically reruns flaky tests (Python 2)
  Flaky is a plugin for nose or py.test that automatically reruns flaky tests.
  .
@@ -43,7 +42,6 @@ Architecture: all
 Depends: ${misc:Depends}, ${python3:Depends}
 Recommends: ${python3:Recommends}
 Suggests: ${python3:Suggests}
-XB-Python-Egg-Name: flaky
 Description: Plugin for nose or py.test that automatically reruns flaky tests (Python 3)
  Flaky is a plugin for nose or py.test that automatically reruns flaky tests.
  .
@@ -58,7 +56,6 @@ Architecture: all
 Depends: ${misc:Depends}, ${pypy:Depends}
 Recommends: ${pypy:Recommends}
 Suggests: ${pypy:Suggests}
-XB-Python-Egg-Name: flaky
 Description: Plugin for nose or py.test that automatically reruns flaky tests (PyPy)
  Flaky is a plugin for nose or py.test that automatically reruns flaky tests.
  .

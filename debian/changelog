@@ -1,6 +1,7 @@
 python-flaky (3.1.0-1) jessie-backports; urgency=medium
 
   * New upstream release.
+  * Drop XB-Python-Egg-Name.
 
  -- Tristan Seligmann <mithrandi@debian.org>  Wed, 17 Feb 2016 18:02:43 +0200
 
