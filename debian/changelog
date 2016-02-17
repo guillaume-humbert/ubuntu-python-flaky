@@ -1,4 +1,4 @@
-python-flaky (3.1.0-1) jessie-backports; urgency=medium
+python-flaky (3.1.0-1) unstable; urgency=medium
 
   * New upstream release.
   * Drop XB-Python-Egg-Name.
