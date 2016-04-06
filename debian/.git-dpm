@@ -1,11 +1,11 @@
 # see git-dpm(1) from git-dpm package
-72d24afd33b57f7f2f7e8994ac04b08e6a7512e5
-72d24afd33b57f7f2f7e8994ac04b08e6a7512e5
-72d24afd33b57f7f2f7e8994ac04b08e6a7512e5
-72d24afd33b57f7f2f7e8994ac04b08e6a7512e5
-python-flaky_3.1.0.orig.tar.gz
-a5f67bff98c86bf81b905ae776cd052e4c8ddf21
-34687
+ba70790ffba1e79754e0453a87bb8ae3acef043e
+ba70790ffba1e79754e0453a87bb8ae3acef043e
+ba70790ffba1e79754e0453a87bb8ae3acef043e
+ba70790ffba1e79754e0453a87bb8ae3acef043e
+python-flaky_3.1.1.orig.tar.gz
+b3d0e4f751325068caa2bef1b9bcf36df783123d
+34749
 debianTag="debian/%e%v"
 patchedTag="patched/%e%v"
 upstreamTag="upstream/%e%u"
