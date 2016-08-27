@@ -20,7 +20,7 @@ Build-Depends:
  python3-nose,
  python3-pytest,
  python3-setuptools,
-Standards-Version: 3.9.7
+Standards-Version: 3.9.8
 Homepage: https://github.com/box/flaky
 
 Package: python-flaky
