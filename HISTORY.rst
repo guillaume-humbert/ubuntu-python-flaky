@@ -6,6 +6,25 @@ Release History
 Upcoming
 ++++++++
 
+3.3.0 (2016-07-28)
+++++++++++++++++++
+
+- Flaky for Nose will now rerun tests using the ``afterTest`` plugin hook, rather than the ``stopTest`` hook.
+  The ``afterTest`` hook is called slightly later in the test run process; this change allows flaky to be used
+  with `TestCase` subclasses that override the test run process, and do teardown after ``stopTest`` is called.
+  In particular, this means that flaky is now compatible with Django's ``LiveServerTestCase``.
+
+
+3.2.0 (2016-07-21)
+++++++++++++++++++
+
+- Flaky will completely suppress the flaky report if ``--no-success-flaky-report`` is specified and no tests
+  needed to be rerun.
+
+**Bugfixes**
+- Flaky will no longer cause ``py.test --pep8`` to fail.
+
+
 3.1.0 (2016-22-11)
 ++++++++++++++++++
 
