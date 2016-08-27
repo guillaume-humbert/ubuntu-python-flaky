@@ -1,3 +1,9 @@
+python-flaky (3.3.0-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Tristan Seligmann <mithrandi@debian.org>  Sat, 27 Aug 2016 13:22:28 +0200
+
 python-flaky (3.1.1-1) unstable; urgency=medium
 
   * New upstream release.
