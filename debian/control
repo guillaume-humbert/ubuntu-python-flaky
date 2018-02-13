@@ -22,6 +22,8 @@ Build-Depends:
  python3-setuptools,
 Standards-Version: 3.9.8
 Homepage: https://github.com/box/flaky
+Vcs-Git: https://salsa.debian.org/python-team/modules/python-flaky.git
+Vcs-Browser: https://salsa.debian.org/python-team/modules/python-flaky
 
 Package: python-flaky
 Architecture: all
