@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>
 Uploaders: Tristan Seligmann <mithrandi@debian.org>
 Build-Depends:
- debhelper-compat (= 9),
+ debhelper-compat (= 12),
  dh-python,
  python-all,
  python-genty,
