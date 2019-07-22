@@ -6,8 +6,6 @@ Uploaders: Tristan Seligmann <mithrandi@debian.org>
 Build-Depends:
  debhelper-compat (= 9),
  dh-python,
- pypy,
- pypy-setuptools,
  python-all,
  python-genty,
  python-mock,
@@ -52,17 +50,3 @@ Description: Plugin for nose or py.test that automatically reruns flaky tests (P
  tests or marking them to @skip, they can be automatically retried.
  .
  This package contains the Python 3 version of flaky.
-
-Package: pypy-flaky
-Architecture: all
-Depends: ${misc:Depends}, ${pypy:Depends}
-Recommends: ${pypy:Recommends}
-Suggests: ${pypy:Suggests}
-Description: Plugin for nose or py.test that automatically reruns flaky tests (PyPy)
- Flaky is a plugin for nose or py.test that automatically reruns flaky tests.
- .
- Ideally, tests reliably pass or fail, but sometimes test fixtures must rely on
- components that aren't 100% reliable. With flaky, instead of removing those
- tests or marking them to @skip, they can be automatically retried.
- .
- This package contains the PyPy version of flaky.

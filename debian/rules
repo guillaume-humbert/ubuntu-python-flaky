@@ -3,7 +3,6 @@
 export PYBUILD_NAME=flaky
 export PYBUILD_TEST_PYTEST=1
 export PYBUILD_TEST_ARGS=-p flaky.flaky_pytest_plugin -k 'example and not nose and not options' --doctest-modules
-export PYBUILD_DISABLE=test/pypy
 
 %:
-	dh $@ --with pypy,python3,python2 --buildsystem=pybuild
+	dh $@ --with python3,python2 --buildsystem=pybuild
