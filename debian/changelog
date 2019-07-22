@@ -1,5 +1,6 @@
-python-flaky (3.3.0-2) UNRELEASED; urgency=medium
+python-flaky (3.3.0-2) unstable; urgency=medium
 
+  * Team upload.
   * d/control: Set Vcs-* to salsa.debian.org
   * d/copyright: Use https protocol in Format field
   * Convert git repository from git-dpm to gbp layout
@@ -9,7 +10,7 @@ python-flaky (3.3.0-2) UNRELEASED; urgency=medium
   * Bump debhelper compat level to 12
   * Enable autopkgtest-pkg-python testsuite
 
- -- Ondřej Nový <onovy@debian.org>  Tue, 13 Feb 2018 10:07:31 +0100
+ -- Ondřej Nový <onovy@debian.org>  Mon, 22 Jul 2019 21:33:53 +0200
 
 python-flaky (3.3.0-1) unstable; urgency=medium
 
