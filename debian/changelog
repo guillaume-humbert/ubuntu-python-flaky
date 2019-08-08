@@ -1,11 +1,12 @@
-python-flaky (3.6.1-1) UNRELEASED; urgency=medium
+python-flaky (3.6.1-1) unstable; urgency=medium
 
+  * Team upload.
   * New upstream release.
   * Fix tests for new pytest and run nosetests too.
   * d/clean: Clean .pytest_cache.
   * d/source/options: Ignore .egg-info.
 
- -- Ondřej Nový <onovy@debian.org>  Thu, 08 Aug 2019 09:17:14 +0200
+ -- Ondřej Nový <onovy@debian.org>  Thu, 08 Aug 2019 09:53:51 +0200
 
 python-flaky (3.3.0-2) unstable; urgency=medium
 
