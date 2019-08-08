@@ -2,12 +2,12 @@
 
 from __future__ import unicode_literals
 
+from unittest import TestCase, skip
+
 # pylint:disable=import-error
 import pytest
 # pylint:enable=import-error
 from flaky import flaky
-from test.test_case_base import TestCase, skip
-
 
 # This is an end-to-end example of the flaky package in action. Consider it
 # a live tutorial, showing the various features in action.
@@ -20,12 +20,23 @@ def test_something_flaky(dummy_list=[]):
     assert len(dummy_list) > 1
 
 
+@pytest.fixture(scope='function')
+def failing_setup_fixture():
+    assert False
+
+
+@flaky
+@pytest.mark.xfail(strict=True)
+@pytest.mark.usefixtures("failing_setup_fixture")
+def test_something_good_with_failing_setup_fixture():
+    assert True
+
+
 class TestExample(object):
     _threshold = -1
 
     def test_non_flaky_thing(self):
         """Flaky will not interact with this test"""
-        pass
 
     @pytest.mark.xfail
     def test_non_flaky_failing_thing(self):
@@ -55,7 +66,6 @@ class TestExample(object):
     @flaky(2, 2)
     def test_flaky_thing_that_always_passes(self):
         """Flaky will run this test twice.  Both will succeed."""
-        pass
 
     @pytest.mark.skipif(
         'True',
@@ -97,6 +107,20 @@ class TestExampleFlakyTestCase(TestCase):
 
 class TestFlakySubclass(TestExampleFlakyTestCase):
     pass
+
+
+@pytest.mark.flaky
+class TestMarkedClass(object):
+    _threshold = -1
+
+    @staticmethod
+    def test_flaky_thing_that_fails_then_succeeds():
+        """
+        Flaky will run this test twice.
+        It will fail once and then succeed.
+        """
+        TestMarkedClass._threshold += 1
+        assert TestMarkedClass._threshold >= 1
 
 
 def _test_flaky_doctest():

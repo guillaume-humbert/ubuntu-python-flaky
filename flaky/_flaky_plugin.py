@@ -1,7 +1,10 @@
 # coding: utf-8
 
 from __future__ import unicode_literals
+
 from io import StringIO
+from traceback import format_exception
+
 from flaky import defaults
 from flaky.names import FlakyNames
 from flaky.utils import ensure_unicode_string
@@ -16,6 +19,7 @@ class _FlakyPlugin(object):
         super(_FlakyPlugin, self).__init__()
         self._stream = StringIO()
         self._flaky_success_report = True
+        self._had_flaky_tests = False
 
     @property
     def stream(self):
@@ -36,15 +40,11 @@ class _FlakyPlugin(object):
         Add messaging about a test failure to the stream, which will be
         printed by the plugin's report method.
         """
+        formatted_exception_info = ''.join(format_exception(*err)).replace('\n', '\n\t').rstrip()
         self._stream.writelines([
             ensure_unicode_string(test_callable_name),
-            message,
-            '\n\t',
-            ensure_unicode_string(err[0]),
-            '\n\t',
-            ensure_unicode_string(err[1]),
-            '\n\t',
-            ensure_unicode_string(err[2]),
+            ensure_unicode_string(message),
+            ensure_unicode_string(formatted_exception_info),
             '\n',
         ])
 
@@ -181,6 +181,7 @@ class _FlakyPlugin(object):
             return False
 
         if self._has_flaky_attributes(test):
+            self._had_flaky_tests = True
             self._add_flaky_test_failure(test, err)
             should_handle = self._should_handle_test_error_or_failure(test)
             self._increment_flaky_attribute(test, FlakyNames.CURRENT_RUNS)
@@ -190,12 +191,10 @@ class _FlakyPlugin(object):
                     self._log_intermediate_failure(err, flaky_attributes, name)
                     self._mark_test_for_rerun(test)
                     return True
-                else:
-                    self._log_test_failure(name, err, self._not_rerun_message)
-                    return False
-            else:
-                flaky_attributes = self._get_flaky_attributes(test)
-                self._report_final_failure(err, flaky_attributes, name)
+                self._log_test_failure(name, err, self._not_rerun_message)
+                return False
+            flaky_attributes = self._get_flaky_attributes(test)
+            self._report_final_failure(err, flaky_attributes, name)
         return False
 
     def _should_rerun_test(self, test, name, err):
@@ -272,6 +271,7 @@ class _FlakyPlugin(object):
         need_reruns = self._should_handle_test_success(test)
 
         if self._has_flaky_attributes(test):
+            self._had_flaky_tests = True
             flaky = self._get_flaky_attributes(test)
             min_passes = flaky[FlakyNames.MIN_PASSES]
             passes = flaky[FlakyNames.CURRENT_PASSES] + 1
@@ -281,14 +281,14 @@ class _FlakyPlugin(object):
             if self._flaky_success_report:
                 self._stream.writelines([
                     ensure_unicode_string(name),
-                    ' passed {0} out of the required {1} times. '.format(
+                    ' passed {} out of the required {} times. '.format(
                         passes,
                         min_passes,
                     ),
                 ])
                 if need_reruns:
                     self._stream.write(
-                        'Running test again until it passes {0} times.\n'.format(
+                        'Running test again until it passes {} times.\n'.format(
                             min_passes,
                         )
                     )
@@ -351,7 +351,7 @@ class _FlakyPlugin(object):
             '--max-runs',
             action="store",
             dest="max_runs",
-            type="int",
+            type=int,
             default=2,
             help="If --force-flaky is specified, we will run each test at "
                  "most this many times (unless the test has its own flaky "
@@ -361,7 +361,7 @@ class _FlakyPlugin(object):
             '--min-passes',
             action="store",
             dest="min_passes",
-            type="int",
+            type=int,
             default=1,
             help="If --force-flaky is specified, we will run each test at "
                  "least this many times (unless the test has its own flaky "
@@ -378,6 +378,10 @@ class _FlakyPlugin(object):
             `file`
         """
         value = self._stream.getvalue()
+
+        # Do not print report if there were no tests marked 'flaky' at all.
+        if not self._had_flaky_tests and not value:
+            return
 
         # If everything succeeded and --no-success-flaky-report is specified
         # don't print anything.
@@ -507,12 +511,12 @@ class _FlakyPlugin(object):
         :rtype:
             `dict` of `unicode` to varies
         """
-        return dict((
-            (attr, cls._get_flaky_attribute(
+        return {
+            attr: cls._get_flaky_attribute(
                 test_item,
                 attr,
-            )) for attr in FlakyNames()
-        ))
+            ) for attr in FlakyNames()
+        }
 
     @classmethod
     def _add_flaky_test_failure(cls, test, err):
@@ -608,7 +612,7 @@ class _FlakyPlugin(object):
         raise NotImplementedError  # pragma: no cover
 
     @classmethod
-    def _make_test_flaky(cls, test, max_runs, min_passes):
+    def _make_test_flaky(cls, test, max_runs=None, min_passes=None, rerun_filter=None):
         """
         Make a given test flaky.
 
@@ -624,7 +628,22 @@ class _FlakyPlugin(object):
             The value of the FlakyNames.MIN_PASSES attribute to use.
         :type min_passes:
             `int`
+        :param rerun_filter:
+            Filter function to decide whether a test should be rerun if it fails.
+            Function signature is as follows:
+                (err, name, test, plugin) -> should_rerun
+            - err (`tuple` of `class`, :class:`Exception`, `traceback`):
+                Information about the test failure (from sys.exc_info())
+            - name (`unicode`):
+                The test name
+            - test (:class:`nose.case.Test` or :class:`Function`):
+                The test that has raised an error
+            - plugin (:class:`FlakyNosePlugin` or :class:`FlakyPytestPlugin`):
+                The flaky plugin. Has a :prop:`stream` that can be written to in
+                order to add to the Flaky Report.
+        :type rerun_filter:
+            `callable`
         """
-        attrib_dict = defaults.default_flaky_attributes(max_runs, min_passes)
+        attrib_dict = defaults.default_flaky_attributes(max_runs, min_passes, rerun_filter)
         for attr, value in attrib_dict.items():
             cls._set_flaky_attribute(test, attr, value)
