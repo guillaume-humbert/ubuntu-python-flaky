@@ -2,6 +2,7 @@ python-flaky (3.6.1-1) UNRELEASED; urgency=medium
 
   * New upstream release.
   * Fix tests for new pytest and run nosetests too.
+  * d/clean: Clean .pytest_cache.
 
  -- Ondřej Nový <onovy@debian.org>  Thu, 08 Aug 2019 09:17:14 +0200
 
