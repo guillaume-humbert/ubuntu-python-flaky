@@ -5,11 +5,12 @@ from io import StringIO
 from mock import Mock, patch
 # pylint:disable=import-error
 import pytest
+from _pytest.runner import CallInfo
 # pylint:enable=import-error
 from flaky import flaky
 from flaky import _flaky_plugin
 from flaky.flaky_pytest_plugin import (
-    CallInfo,
+    call_runtest_hook,
     FlakyPlugin,
     FlakyXdist,
     PLUGIN,
@@ -54,7 +55,7 @@ def mock_plugin_rerun(monkeypatch, flaky_plugin):
 
 
 @pytest.fixture(params=['instance', 'module', 'parent'])
-def flaky_test(request):
+def flaky_test(request, mock_config):
     def test_function():
         pass
     test_owner = Mock()
@@ -63,6 +64,7 @@ def flaky_test(request):
     kwargs = {request.param: test_owner}
     test = MockTestItem(**kwargs)
     setattr(test, 'owner', test_owner)
+    setattr(test, 'config', mock_config)
     return test
 
 
@@ -103,6 +105,21 @@ class MockTestItem(object):
         pass
 
 
+class MockConfig(object):
+    def getvalue(self, key):
+        # pylint:disable=unused-argument,no-self-use
+        return False
+
+    def getoption(self, key, default):
+        # pylint:disable=unused-argument,no-self-use
+        return default
+
+
+@pytest.fixture
+def mock_config():
+    return MockConfig()
+
+
 class MockFlakyCallInfo(CallInfo):
     def __init__(self, item, when):
         # pylint:disable=super-init-not-called
@@ -128,7 +145,7 @@ def test_flaky_plugin_report(flaky_plugin, mock_io, string_io):
     {'flaky_report': ''},
     {'flaky_report': 'ŝȁḿҏľȅ ƭȅхƭ'},
 ))
-def mock_xdist_node_slaveoutput(request):
+def mock_xdist_node_workeroutput(request):
     return request.param
 
 
@@ -137,24 +154,25 @@ def mock_xdist_error(request):
     return request.param
 
 
-@pytest.mark.parametrize('assign_slaveoutput', (True, False))
+@pytest.mark.parametrize('assign_workeroutput', (True, False))
 def test_flaky_xdist_nodedown(
-        mock_xdist_node_slaveoutput,
-        assign_slaveoutput,
+        mock_xdist_node_workeroutput,
+        assign_workeroutput,
         mock_xdist_error
 ):
     flaky_xdist = FlakyXdist(PLUGIN)
     node = Mock()
-    if assign_slaveoutput:
-        node.slaveoutput = mock_xdist_node_slaveoutput
+    if assign_workeroutput:
+        node.workeroutput = mock_xdist_node_workeroutput
     else:
+        delattr(node, 'workeroutput')
         delattr(node, 'slaveoutput')
     mock_stream = Mock(StringIO)
     with patch.object(PLUGIN, '_stream', mock_stream):
         flaky_xdist.pytest_testnodedown(node, mock_xdist_error)
-    if assign_slaveoutput and 'flaky_report' in mock_xdist_node_slaveoutput:
+    if assign_workeroutput and 'flaky_report' in mock_xdist_node_workeroutput:
         mock_stream.write.assert_called_once_with(
-            mock_xdist_node_slaveoutput['flaky_report'],
+            mock_xdist_node_workeroutput['flaky_report'],
         )
     else:
         assert not mock_stream.write.called
@@ -180,9 +198,9 @@ def test_flaky_session_finish_copies_flaky_report(
     PLUGIN.stream.truncate()
     PLUGIN.stream.write(stream_report)
     PLUGIN.config = Mock()
-    PLUGIN.config.slaveoutput = {'flaky_report': initial_report}
+    PLUGIN.config.workeroutput = {'flaky_report': initial_report}
     PLUGIN.pytest_sessionfinish()
-    assert PLUGIN.config.slaveoutput['flaky_report'] == expected_report
+    assert PLUGIN.config.workeroutput['flaky_report'] == expected_report
 
 
 def test_flaky_plugin_can_suppress_success_report(
@@ -225,7 +243,7 @@ def test_flaky_plugin_raises_errors_in_fixture_setup(
     flaky_test.ihook = Mock()
     flaky_test.ihook.pytest_runtest_setup = error_raising_setup_function
     flaky_plugin._call_infos[flaky_test] = {}  # pylint:disable=protected-access
-    call_info = flaky_plugin.call_runtest_hook(flaky_test, 'setup')
+    call_info = call_runtest_hook(flaky_test, 'setup')
     assert flaky_test.ran_setup
     assert string_io.getvalue() == mock_io.getvalue()
     assert call_info.excinfo.type is ZeroDivisionError
@@ -450,13 +468,13 @@ class TestFlakyPytestPlugin(object):
         )
         stream.writelines([
             self._test_method_name,
-            " passed {0} out of the required {1} times. ".format(
+            " passed {} out of the required {} times. ".format(
                 current_passes + 1, min_passes,
             ),
         ])
         if expected_plugin_handles_success:
             stream.write(
-                'Running test again until it passes {0} times.\n'.format(
+                'Running test again until it passes {} times.\n'.format(
                     min_passes,
                 ),
             )
@@ -521,7 +539,7 @@ class TestFlakyPytestPlugin(object):
         if expected_plugin_handles_failure:
             stream.writelines([
                 self._test_method_name,
-                ' failed ({0} runs remaining out of {1}).'.format(
+                ' failed ({} runs remaining out of {}).'.format(
                     max_runs - current_runs - 1, max_runs
                 ),
                 '\n\t',
@@ -552,11 +570,11 @@ class TestFlakyPytestPlugin(object):
 
     @staticmethod
     def _get_flaky_attributes(test):
-        actual_flaky_attributes = dict((
-            (attr, getattr(
+        actual_flaky_attributes = {
+            attr: getattr(
                 test,
                 attr,
                 None,
-            )) for attr in FlakyNames()
-        ))
+            ) for attr in FlakyNames()
+        }
         return actual_flaky_attributes

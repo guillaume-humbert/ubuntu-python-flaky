@@ -1,15 +1,14 @@
 # coding: utf-8
 
 from __future__ import unicode_literals
+
+from unittest import TestCase
+
 from flaky.flaky_decorator import flaky
 from flaky.names import FlakyNames
-from test.test_case_base import TestCase
 
 
 class TestFlakyDecorator(TestCase):
-    def setUp(self):
-        super(TestFlakyDecorator, self).setUp()
-
     def test_flaky_raises_for_non_positive_min_passes(self):
         def test_something():
             pass
@@ -34,13 +33,13 @@ class TestFlakyDecorator(TestCase):
         def test_something():
             pass
 
-        flaky_attribute = dict((
-            (attr, getattr(
+        flaky_attribute = {
+            attr: getattr(
                 test_something,
                 attr,
                 None
-            )) for attr in FlakyNames()
-        ))
+            ) for attr in FlakyNames()
+        }
 
         self.assertIsNotNone(flaky_attribute)
         self.assertDictContainsSubset(

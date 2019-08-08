@@ -6,6 +6,56 @@ Release History
 Upcoming
 ++++++++
 
+3.6.1 (2019-08-06)
+++++++++++++++++++
+
+**Bugfixes**
+- Reraise ``KeyboardInterrupt`` when running tests under pytest.
+
+
+3.6.0 (2019-06-25)
+++++++++++++++++++
+
+- Do not print an empty report if no tests marked 'flaky' were run at all (#116).
+  NOTE: This change could be breaking if you relied on the flaky report being printed.
+
+3.5.3 (2019-01-16)
+++++++++++++++++++
+
+- Add rerun_filter parameter to _make_test_flaky
+
+3.5.2 (2019-01-10)
+++++++++++++++++++
+
+**Bugfixes**
+- Fall back to old pytest marker API for older pytest version (``get_marker`` vs ``iter_markers``).
+
+3.5.1 (2019-01-09)
+++++++++++++++++++
+
+- Officially support and test on Python 3.6 and 3.7.
+- Adds a pytest marker that can be used instead of ```@flaky``.
+- Replaced references to 'slaveoutput', where possible
+  with 'workeroutput', following the convention chosen by pytest.
+- Prints formatted tracebacks in the flaky report when using nose.
+
+**Bugfixes**
+- Ensure that tests are only reported as successful to the nose runner once.
+
+3.5.0 (2019-01-07)
+++++++++++++++++++
+
+- Updated references to pytest instead of py.test.
+
+**Bugfixes**
+- Flaky is now compatible with pytest >= 4.1.
+
+3.4.0 (2017-06-15)
+++++++++++++++++++
+
+**Bugfixes**
+- Flaky for pytest will no longer silently swallow errors that occur during test setup.
+
 3.3.0 (2016-07-28)
 ++++++++++++++++++
 

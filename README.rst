@@ -4,20 +4,16 @@ flaky
 .. image:: http://opensource.box.com/badges/active.svg
     :target: http://opensource.box.com/badges
 
-.. image:: https://travis-ci.org/box/flaky.png?branch=master
+.. image:: https://travis-ci.org/box/flaky.svg?branch=master
     :target: https://travis-ci.org/box/flaky
 
 .. image:: https://img.shields.io/pypi/v/flaky.svg
     :target: https://pypi.python.org/pypi/flaky
 
-.. image:: https://img.shields.io/pypi/dm/flaky.svg
-    :target: https://pypi.python.org/pypi/flaky
-
-
 About
 -----
 
-Flaky is a plugin for nose or py.test that automatically reruns flaky tests.
+Flaky is a plugin for nose or pytest that automatically reruns flaky tests.
 
 Ideally, tests reliably pass or fail, but sometimes test fixtures must rely on components that aren't 100%
 reliable. With flaky, instead of removing those tests or marking them to @skip, they can be automatically
@@ -57,7 +53,7 @@ run max_runs times without passing min_passes times, it's considered a failure.
         self.assertEqual(result, value_to_double * 2, 'Result doubled incorrectly.')
 
 Marking a class flaky
-~~~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++++
 
 In addition to marking a single test flaky, entire test cases can be marked flaky:
 
@@ -79,6 +75,11 @@ In addition to marking a single test flaky, entire test cases can be marked flak
 The @flaky class decorator will mark test_flaky_doubler as flaky, but it won't override the 3 max_runs
 for test_flaky_tripler (from the decorator on that test method).
 
+Pytest marker
++++++++++++++
+
+When using ``pytest``, ``@pytest.mark.flaky`` can be used in place of ``@flaky``.
+
 Don't rerun certain types of failures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -98,7 +99,7 @@ after those failures, you can specify a filter function that can tell flaky to f
     def test_something_else():
         raise ProductCrashedError
 
-Flaky will run `test_something` twice, but will only run `test_something_else` once.
+Flaky will run ``test_something`` twice, but will only run ``test_something_else`` once.
 
 It can also be used to incur a delay between test retries:
 
@@ -123,11 +124,11 @@ Like any nose plugin, flaky can be activated via the command line:
 
     nosetests --with-flaky
 
-With py.test, flaky will automatically run. It can, however be disabled via the command line:
+With pytest, flaky will automatically run. It can, however be disabled via the command line:
 
 .. code-block:: console
 
-    py.test -p no:flaky
+    pytest -p no:flaky
 
 Command line arguments
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -151,7 +152,7 @@ Pass ``--max-runs=MAX_RUNS`` and/or ``--min-passes=MIN_PASSES`` to control the b
 is specified. Flaky decorators on individual tests will override these defaults.
 
 
-*Additional usage examples are in the code - see test/test_example.py*
+*Additional usage examples are in the code - see test/test_nose/test_nose_example.py and test/test_pytest/test_pytest_example.py*
 
 Installation
 ------------
@@ -170,7 +171,7 @@ Flaky is tested with the following test runners and options:
 
 - Nosetests. Doctests cannot be marked flaky.
 
-- Py.test. Works with `pytest-xdist` but not with the `--boxed` option. Doctests cannot be marked flaky.
+- Py.test. Works with ``pytest-xdist`` but not with the ``--boxed`` option. Doctests cannot be marked flaky.
 
 
 Contributing
@@ -199,7 +200,7 @@ Run all tests using -
 
     tox
 
-The tox tests include code style checks via pep8 and pylint.
+The tox tests include code style checks via pycodestyle and pylint.
 
 
 Copyright and License
