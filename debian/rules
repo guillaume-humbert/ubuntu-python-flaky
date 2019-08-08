@@ -1,8 +1,16 @@
 #! /usr/bin/make -f
 
 export PYBUILD_NAME=flaky
-export PYBUILD_TEST_PYTEST=1
-export PYBUILD_TEST_ARGS=-p flaky.flaky_pytest_plugin -k 'example and not nose and not options' --doctest-modules
 
 %:
 	dh $@ --with python3,python2 --buildsystem=pybuild
+
+override_dh_auto_test:
+
+override_dh_auto_install:
+	dh_auto_install
+	# run tests after install: plugin needs to get registered by setup.py/entry_points
+	PYBUILD_SYSTEM=custom \
+		PYBUILD_TEST_ARGS="{interpreter} -m pytest -v -k 'example and not options' --doctest-modules test/test_pytest/ && \
+			{interpreter} -m nose -v --with-flaky --force-flaky --max-runs 2 test/test_nose/test_nose_options_example.py" \
+		dh_auto_test
