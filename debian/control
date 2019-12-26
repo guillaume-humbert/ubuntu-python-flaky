@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>
 Uploaders: Tristan Seligmann <mithrandi@debian.org>
 Build-Depends:
- debhelper-compat (= 12),
+ debhelper (>= 11.1.6~),
  dh-python,
  python-all,
  python-genty,
@@ -18,7 +18,7 @@ Build-Depends:
  python3-nose,
  python3-pytest,
  python3-setuptools,
-Standards-Version: 4.4.1
+Standards-Version: 4.1.4
 Homepage: https://github.com/box/flaky
 Vcs-Git: https://salsa.debian.org/python-team/modules/python-flaky.git
 Vcs-Browser: https://salsa.debian.org/python-team/modules/python-flaky
